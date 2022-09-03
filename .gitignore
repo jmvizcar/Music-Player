@@ -1,0 +1,7 @@
+# ignore lib folder
+lib/
+bin/
+.vscode/
+obj/
+
+*.csproj
