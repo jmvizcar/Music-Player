@@ -1,20 +1,11 @@
 ﻿using System;
 
 namespace MediaPlayer;
-class MusicPlayer
+class Program
 {
-  // Music Player variable
-  WMPLib.WindowsMediaPlayer MPlayer;
-
-  public MusicPlayer()
+  static void Main(string[] args)
   {
-    MPlayer = new WMPLib.WindowsMediaPlayer();
+    MusicPlayer mp = new MusicPlayer();
+    Console.WriteLine($"The Music Player is type {mp.GetType()}");
   }
-
-  private void PlayFile(string url)
-  {
-
-  }
-  
 }
-
