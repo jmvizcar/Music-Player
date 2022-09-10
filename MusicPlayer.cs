@@ -32,6 +32,11 @@ public partial class MusicPlayer : Form
         buttonPlay.Click += OnButtonPlayClick;
         flowPanel.Controls.Add(buttonPlay);
 
+        var buttonPause = new Button();
+        buttonPause.Text = "Pause";
+        buttonPause.Click += OnButtonPauseClick;
+        flowPanel.Controls.Add(buttonPause);
+
         var buttonStop = new Button();
         buttonStop.Text = "Stop";
         buttonStop.Click += OnButtonStopClick;
@@ -55,9 +60,14 @@ public partial class MusicPlayer : Form
         }
         outputDevice.Play();
     }
+    private void OnButtonPauseClick(object? sender, EventArgs args)
+    {
+        outputDevice?.Stop();
+    }
     private void OnButtonStopClick(object? sender, EventArgs args)
     {
         outputDevice?.Stop();
+        audioFile.Position = 0;
     }
 
     private void OnPlaybackStopped(object? sender, StoppedEventArgs args)
