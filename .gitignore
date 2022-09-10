@@ -1,7 +1,5 @@
-# ignore lib folder
-lib/
+# no bin or object directories
 bin/
-.vscode/
 obj/
-
-*.csproj
+# no .csproj files
+*.csproj*

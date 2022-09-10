@@ -1,12 +1,16 @@
-﻿using System;
-using NAudio.Wave;
+﻿namespace MusicPlayer;
 
-namespace MediaPlayer;
-class Program
+static class Program
 {
-  static void Main(string[] args)
-  {
-    MusicPlayer mp = new MusicPlayer();
-    mp.Play(@"C:\Users\Jesus\Music\FFXIV\ENDWALKER 7-inch Vinyl Single\2_Endwalker - Footfalls.mp3");
-  }
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
+    {
+        // To customize application configuration such as set high DPI settings or default font,
+        // see https://aka.ms/applicationconfiguration.
+        ApplicationConfiguration.Initialize();
+        Application.Run(new MusicPlayer());
+    }    
 }
