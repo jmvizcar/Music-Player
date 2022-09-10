@@ -1,4 +1,5 @@
 using NAudio.Wave;
+using System.Collections.Generic;
 
 namespace MusicPlayer;
 public partial class MusicPlayer : Form
@@ -6,6 +7,9 @@ public partial class MusicPlayer : Form
     private WaveOutEvent outputDevice;
     private AudioFileReader audioFile;
     private bool closing;
+    private string path;
+
+    public List<string> currentPlaylist;
     public string CurrentSong
     {get; set;}
     public double CurrentTime
@@ -18,6 +22,8 @@ public partial class MusicPlayer : Form
         closing = false;
         CurrentSong = "";
         CurrentTime = 0;
+        currentPlaylist = new List<string>();
+        path = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
         InitializeComponent();
     }
 
@@ -54,11 +60,12 @@ public partial class MusicPlayer : Form
         }
         if (audioFile == null)
         {
-            audioFile = new AudioFileReader(@"C:\Users\Jesus\Music\FFXIV\ENDWALKER 7-inch Vinyl Single\2_Endwalker - Footfalls.mp3");
+            audioFile = new AudioFileReader(path + @"\FFXIV\ENDWALKER 7-inch Vinyl Single\2_Endwalker - Footfalls.mp3");
             outputDevice.Init(audioFile);
 
         }
         outputDevice.Play();
+        MessageBox.Show(path);
     }
     private void OnButtonPauseClick(object? sender, EventArgs args)
     {
