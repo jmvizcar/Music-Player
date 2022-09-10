@@ -5,11 +5,19 @@ public partial class MusicPlayer : Form
 {
     private WaveOutEvent outputDevice;
     private AudioFileReader audioFile;
+    private bool closing;
+    public string CurrentSong
+    {get; set;}
+    public double CurrentTime
+    {get; set;}
 
     public MusicPlayer()
     {
         outputDevice = null!;
         audioFile = null!;
+        closing = false;
+        CurrentSong = "";
+        CurrentTime = 0;
         InitializeComponent();
     }
 
@@ -54,10 +62,13 @@ public partial class MusicPlayer : Form
 
     private void OnPlaybackStopped(object? sender, StoppedEventArgs args)
     {
-        outputDevice.Dispose();
-        outputDevice = null!;
-        audioFile.Dispose();
-        audioFile = null!;
+        if(closing)
+        {
+            outputDevice.Dispose();
+            outputDevice = null!;
+            audioFile.Dispose();
+            audioFile = null!;
+        }
     }
 
 }
