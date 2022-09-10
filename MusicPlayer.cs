@@ -32,6 +32,7 @@ public partial class MusicPlayer : Form
         var flowPanel = new FlowLayoutPanel();
         flowPanel.FlowDirection = FlowDirection.LeftToRight;
         flowPanel.Margin = new Padding(10);
+        flowPanel.Width = 300;
 
         var buttonPlay = new Button();
         buttonPlay.Text = "Play";
@@ -48,6 +49,9 @@ public partial class MusicPlayer : Form
         buttonStop.Click += OnButtonStopClick;
         flowPanel.Controls.Add(buttonStop);
 
+        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        this.ClientSize = new System.Drawing.Size(800, 450);
+        this.Text = "Music Player";
         this.Controls.Add(flowPanel);
     }
 
