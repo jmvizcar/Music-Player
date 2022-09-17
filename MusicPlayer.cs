@@ -8,7 +8,8 @@ public partial class MusicPlayer : Form
     private AudioFileReader audioFile;
     private bool closing;
     private string path;
-
+    // Variable to hold the full list of albums currently in the Music directory.
+    private List<string> musicDirect;
     public List<string> currentPlaylist;
     public string CurrentSong
     {get; set;}
@@ -24,6 +25,10 @@ public partial class MusicPlayer : Form
         CurrentTime = 0;
         currentPlaylist = new List<string>();
         path = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        // Adds all mp3 files to the directory list
+        musicDirect = new List<string>(Directory.GetFileSystemEntries(path, "*.mp3", SearchOption.AllDirectories));
+        // Adds all m4a files to the directory list
+        musicDirect.AddRange(Directory.GetFileSystemEntries(path, "*.m4a", SearchOption.AllDirectories));
         InitializeComponent();
     }
 
@@ -69,7 +74,7 @@ public partial class MusicPlayer : Form
 
         }
         outputDevice.Play();
-        MessageBox.Show(path);
+        MessageBox.Show(musicDirect[musicDirect.Count - 1]);
     }
     private void OnButtonPauseClick(object? sender, EventArgs args)
     {
