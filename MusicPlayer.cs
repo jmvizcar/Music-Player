@@ -85,10 +85,16 @@ public partial class MusicPlayer : Form
         buttonStop.Click += OnButtonStopClick;
         flowPanel.Controls.Add(buttonStop);
 
+        var volumeBar = new TrackBar() { Minimum = 0, Maximum = 100, Value = 100, 
+            Top = flowPanel.Bottom, TickFrequency = 10, Orientation = Orientation.Vertical, Height = 100};
+            
+        volumeBar.Scroll += (s, a) => outputDevice.Volume = volumeBar.Value / 100f;
+
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(800, 450);
         this.Text = "Music Player";
         this.Controls.Add(flowPanel);
+        this.Controls.Add(volumeBar);
     }
 
     private void OnButtonPlayClick(object? sender, EventArgs args)
