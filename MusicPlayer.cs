@@ -65,10 +65,23 @@ public partial class MusicPlayer : Form
 
     private void InitializeComponent()
     {
+        var allSongs = new TextBox();
+        allSongs.Multiline = true;
+        allSongs.ReadOnly = true;
+        allSongs.SelectionStart = allSongs.Text.Length;
+        allSongs.BackColor = Form.DefaultBackColor;
+        allSongs.BorderStyle = BorderStyle.None;
+        allSongs.Height = 300;
+        allSongs.Width = 800;
+        allSongs.ScrollToCaret();
+        
+        musicDirect.ForEach(song => allSongs.AppendText(song));
+
         var flowPanel = new FlowLayoutPanel();
         flowPanel.FlowDirection = FlowDirection.LeftToRight;
         flowPanel.Margin = new Padding(10);
         flowPanel.Width = 300;
+        flowPanel.Top = allSongs.Bottom;
 
         var buttonPlay = new Button();
         buttonPlay.Text = "Play";
@@ -85,14 +98,15 @@ public partial class MusicPlayer : Form
         buttonStop.Click += OnButtonStopClick;
         flowPanel.Controls.Add(buttonStop);
 
-        var volumeBar = new TrackBar() { Minimum = 0, Maximum = 100, Value = 100, 
-            Top = flowPanel.Bottom, TickFrequency = 10, Orientation = Orientation.Vertical, Height = 100};
+        var volumeBar = new TrackBar() { Minimum = 0, Maximum = 100, Value = 100, Location = new Point(700, 400),
+            TickFrequency = 10, Orientation = Orientation.Horizontal, Height = 100};
             
         volumeBar.Scroll += (s, a) => outputDevice.Volume = volumeBar.Value / 100f;
 
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(800, 450);
         this.Text = "Music Player";
+        this.Controls.Add(allSongs);
         this.Controls.Add(flowPanel);
         this.Controls.Add(volumeBar);
     }
