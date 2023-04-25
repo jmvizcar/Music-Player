@@ -71,11 +71,9 @@ public partial class MusicPlayer : Form
         allSongs.SelectionStart = allSongs.Text.Length;
         allSongs.BackColor = Form.DefaultBackColor;
         allSongs.BorderStyle = BorderStyle.None;
-        allSongs.Height = 300;
-        allSongs.Width = 800;
+        allSongs.ClientSize = new Size(800, 300);
         allSongs.ScrollToCaret();
-        
-        musicDirect.ForEach(song => allSongs.AppendText(song));
+        allSongs.Lines = musicDirect.ToArray();
 
         var flowPanel = new FlowLayoutPanel();
         flowPanel.FlowDirection = FlowDirection.LeftToRight;
