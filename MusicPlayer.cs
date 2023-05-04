@@ -3,36 +3,6 @@ using System.Collections.Generic;
 
 namespace MusicPlayer;
 
-public static class WaveStreamExtensions
-{
-    // Set position of WaveStream to nearest block to supplied position
-    public static void SetPosition(this WaveStream strm, long position)
-    {
-        // Distance from block boundary
-        long adjust = position % strm.WaveFormat.BlockAlign;
-        // Clamps the range
-        long newPos = Math.Max(0, Math.Min(strm.Length, position - adjust));
-        strm.Position = newPos;
-    }
-
-    // Set position of WaveStream by seconds
-    public static void SetPosition(this WaveStream strm, double seconds)
-    {
-        strm.SetPosition((long)(seconds * strm.WaveFormat.AverageBytesPerSecond));
-    }
-
-    // Set position of WaveStream by TimeSpan
-    public static void SetPosition(this WaveStream strm, TimeSpan time)
-    {
-        strm.SetPosition(time.TotalSeconds);
-    }
-
-    // Set position of WaveStream relative to current position
-    public static void Seek(this WaveStream strm, double offset){
-        strm.SetPosition(strm.Position + (long)(offset * strm.WaveFormat.AverageBytesPerSecond));
-    }
-}
-
 public partial class MusicPlayer : Form
 {
     private WaveOutEvent outputDevice;
@@ -111,8 +81,8 @@ public partial class MusicPlayer : Form
 
     private void OnButtonPlayClick(object? sender, EventArgs args)
     {
-        // Test string used to hold "Endwalker - Footfalls.mp3"
-        string song = musicDirect.Find((title) => title.Contains("Footfalls.mp3"))!;
+        // Song string used to hold the first song in the music directory.
+        string song = musicDirect.ToArray()[0];
         if (outputDevice == null)
         {
             outputDevice = new WaveOutEvent();
@@ -121,7 +91,7 @@ public partial class MusicPlayer : Form
         if (audioFile == null)
         {
             audioFile = new AudioFileReader(song);
-            CurrentSong = song.Substring(song.IndexOf("Endwalker"));
+            CurrentSong = song;
             outputDevice.Init(audioFile);
 
         }
