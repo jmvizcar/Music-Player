@@ -64,6 +64,12 @@ public partial class MusicPlayer : Form
         buttonNext.Click += OnButtonPlayClick;
         flowPanel.Controls.Add(buttonNext);
 
+        var buttonPrev = new Button();
+        buttonPrev.Text = "Prev";
+        buttonPrev.Click += OnButtonPrevClick;
+        buttonPrev.Click += OnButtonPlayClick;
+        flowPanel.Controls.Add(buttonPrev);
+
         var volumeBar = new TrackBar() { Minimum = 0, Maximum = 100, Value = 100, Location = new Point(700, 400),
             TickFrequency = 10, Orientation = Orientation.Horizontal, Height = 100};
             
@@ -114,6 +120,14 @@ public partial class MusicPlayer : Form
         outputDevice?.Stop();
         audioFile = null!;
         playlistPos++;
+    }
+    /* This will return to the previous song in the playlist similar to OnButtonNextClick */
+    private void OnButtonPrevClick(object? sender, EventArgs args)
+    {
+        outputDevice?.Stop();
+        audioFile = null!;
+        // Check to see if at the beginning of the playlist.
+        if( playlistPos > 0 ) playlistPos--;
     }
 
     private void OnPlaybackStopped(object? sender, StoppedEventArgs args)
