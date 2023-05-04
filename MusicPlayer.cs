@@ -11,6 +11,8 @@ public partial class MusicPlayer : Form
     private string path;
     // Variable to hold the full list of albums currently in the Music directory.
     private List<string> musicDirect;
+
+    private int playlistPos;
     public List<string> currentPlaylist;
     public string CurrentSong
     {get; set;}
@@ -24,6 +26,7 @@ public partial class MusicPlayer : Form
         closing = false;
         CurrentSong = "";
         CurrentTime = 0;
+        playlistPos = 0;
         currentPlaylist = new List<string>();
         path = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
         // Adds all mp3 files to the directory list
@@ -35,21 +38,10 @@ public partial class MusicPlayer : Form
 
     private void InitializeComponent()
     {
-        var allSongs = new TextBox();
-        allSongs.Multiline = true;
-        allSongs.ReadOnly = true;
-        allSongs.SelectionStart = allSongs.Text.Length;
-        allSongs.BackColor = Form.DefaultBackColor;
-        allSongs.BorderStyle = BorderStyle.None;
-        allSongs.ClientSize = new Size(800, 300);
-        allSongs.ScrollToCaret();
-        allSongs.Lines = musicDirect.ToArray();
-
         var flowPanel = new FlowLayoutPanel();
         flowPanel.FlowDirection = FlowDirection.LeftToRight;
         flowPanel.Margin = new Padding(10);
         flowPanel.Width = 300;
-        flowPanel.Top = allSongs.Bottom;
 
         var buttonPlay = new Button();
         buttonPlay.Text = "Play";
@@ -66,6 +58,12 @@ public partial class MusicPlayer : Form
         buttonStop.Click += OnButtonStopClick;
         flowPanel.Controls.Add(buttonStop);
 
+        var buttonNext = new Button();
+        buttonNext.Text = "Next";
+        buttonNext.Click += OnButtonNextClick;
+        buttonNext.Click += OnButtonPlayClick;
+        flowPanel.Controls.Add(buttonNext);
+
         var volumeBar = new TrackBar() { Minimum = 0, Maximum = 100, Value = 100, Location = new Point(700, 400),
             TickFrequency = 10, Orientation = Orientation.Horizontal, Height = 100};
             
@@ -74,7 +72,6 @@ public partial class MusicPlayer : Form
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(800, 450);
         this.Text = "Music Player";
-        this.Controls.Add(allSongs);
         this.Controls.Add(flowPanel);
         this.Controls.Add(volumeBar);
     }
@@ -82,7 +79,7 @@ public partial class MusicPlayer : Form
     private void OnButtonPlayClick(object? sender, EventArgs args)
     {
         // Song string used to hold the first song in the music directory.
-        string song = musicDirect.ToArray()[0];
+        string song = musicDirect.ToArray()[playlistPos];
         if (outputDevice == null)
         {
             outputDevice = new WaveOutEvent();
@@ -106,6 +103,17 @@ public partial class MusicPlayer : Form
     {
         outputDevice?.Stop();
         audioFile.Position = 0;
+    }
+
+    /*
+     * This will advance to the next song in the playlist.
+     * We set audioFile to null to force a new play from OnButtonPlayClick
+     */
+    private void OnButtonNextClick(object? sender, EventArgs args)
+    {
+        outputDevice?.Stop();
+        audioFile = null!;
+        playlistPos++;
     }
 
     private void OnPlaybackStopped(object? sender, StoppedEventArgs args)
