@@ -19,6 +19,9 @@ public partial class MusicPlayer : Form
     public double CurrentTime
     {get; set;}
 
+    public bool Shuffle
+    {get; set;}
+
     public MusicPlayer()
     {
         outputDevice = null!;
@@ -26,6 +29,7 @@ public partial class MusicPlayer : Form
         closing = false;
         CurrentSong = "";
         CurrentTime = 0;
+        Shuffle = false;
         playlistPos = 0;
         currentPlaylist = new List<string>();
         path = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
@@ -33,6 +37,7 @@ public partial class MusicPlayer : Form
         musicDirect = new List<string>(Directory.GetFileSystemEntries(path, "*.mp3", SearchOption.AllDirectories));
         // Adds all m4a files to the directory list
         musicDirect.AddRange(Directory.GetFileSystemEntries(path, "*.m4a", SearchOption.AllDirectories));
+        currentPlaylist = musicDirect;
         InitializeComponent();
     }
 
@@ -70,6 +75,12 @@ public partial class MusicPlayer : Form
         buttonPrev.Click += OnButtonPlayClick;
         flowPanel.Controls.Add(buttonPrev);
 
+        var buttonShuf = new Button();
+        buttonShuf.Text = "Shuffle";
+        buttonShuf.Click += OnClickToggleShuffle;
+        flowPanel.Controls.Add(buttonShuf);
+
+
         var volumeBar = new TrackBar() { Minimum = 0, Maximum = 100, Value = 100, Location = new Point(700, 400),
             TickFrequency = 10, Orientation = Orientation.Horizontal, Height = 100};
             
@@ -85,7 +96,16 @@ public partial class MusicPlayer : Form
     private void OnButtonPlayClick(object? sender, EventArgs args)
     {
         // Song string used to hold the first song in the music directory.
-        string song = musicDirect.ToArray()[playlistPos];
+        if(Shuffle)
+        {   
+            Random rng = new Random();
+            currentPlaylist = musicDirect.OrderBy(i => rng.Next()).ToList();
+        }
+        else 
+        {
+            currentPlaylist = musicDirect;
+        }
+        string song = currentPlaylist.ToArray()[playlistPos];
         if (outputDevice == null)
         {
             outputDevice = new WaveOutEvent();
@@ -139,6 +159,11 @@ public partial class MusicPlayer : Form
             audioFile.Dispose();
             audioFile = null!;
         }
+    }
+
+    private void OnClickToggleShuffle(object? sender, EventArgs args)
+    {
+        Shuffle = !Shuffle;
     }
 
 }
