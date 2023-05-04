@@ -95,16 +95,7 @@ public partial class MusicPlayer : Form
 
     private void OnButtonPlayClick(object? sender, EventArgs args)
     {
-        // Song string used to hold the first song in the music directory.
-        if(Shuffle)
-        {   
-            Random rng = new Random();
-            currentPlaylist = musicDirect.OrderBy(i => rng.Next()).ToList();
-        }
-        else 
-        {
-            currentPlaylist = musicDirect;
-        }
+        // Song string used to hold the first song in the current playlist.
         string song = currentPlaylist.ToArray()[playlistPos];
         if (outputDevice == null)
         {
@@ -164,6 +155,15 @@ public partial class MusicPlayer : Form
     private void OnClickToggleShuffle(object? sender, EventArgs args)
     {
         Shuffle = !Shuffle;
+        if(Shuffle)
+        {   
+            Random rng = new Random();
+            currentPlaylist = musicDirect.OrderBy(i => rng.Next()).ToList();
+        }
+        else 
+        {
+            currentPlaylist = musicDirect;
+        }
     }
 
 }
