@@ -78,6 +78,9 @@ public partial class MusicPlayer : Form
         var buttonShuf = new Button();
         buttonShuf.Text = "Shuffle";
         buttonShuf.Click += OnClickToggleShuffle;
+        buttonShuf.Click += ((object? sender, EventArgs args) => {
+            buttonShuf.BackColor = this.Shuffle ? System.Drawing.Color.Blue : default(Color);
+        });
         flowPanel.Controls.Add(buttonShuf);
 
 
